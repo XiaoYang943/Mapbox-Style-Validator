@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mapbox Style Validate Schema",
+  "description": "Mapbox样式校验模板(只针对必须校验的属性)",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 8,
+      "errorMessage": {
+        "type": "version属性值必须是整型",
+        "const": "version属性值必须是8"
+      },
+      "description": "MapboxStyle标准版本"
+    },
+    "sources": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["vector", "raster", "raster-array", "raster-dem", "geojson", "image", "video"],
+              "description": "数据源类型",
+              "errorMessage": {
+                "enum": "source属性的type类型不符合规范"
+              }
+            },
+            "scheme": {
+              "type": "string",
+              "enum": ["xyz", "tms"],
+              "description": "瓦片数据源模式",
+              "errorMessage": {
+                "enum": "scheme属性值必须是xyz或tms"
+              }
+            },
+            "tiles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              },
+              "description": "瓦片数据源路径数组",
+              "errorMessage": {
+                "minItems": "tiles不能为空数组",
+                "type": "tiles必须是数组"
+              }
+            },
+            "url": {
+              "type": "string",
+              "minLength": 1,
+              "description": "瓦片数据源路径",
+              "errorMessage": {
+                "minLength": "url不能为空",
+                "type": "url必须是字符串"
+              }
+            }
+          },
+          "required": ["type"],
+          "oneOf": [
+            {
+              "required": ["tiles"],
+              "not": {
+                "required": ["url"]
+              }
+            },
+            {
+              "required": ["url"],
+              "not": {
+                "required": ["tiles"]
+              }
+            }
+          ],
+          "description": "oneOf表示：tiles和url属性中必须至少有一个存在"
+        }
+      }
+    },
+    "glyphs": {
+      "type": "string",
+      "pattern": "^(https?:).*\\.pbf$",
+      "description": "正则匹配。URI的scheme部分为http或https。URI的后缀为.pbf",
+      "errorMessage": {
+        "pattern": "glyphs不符合规范"
+      }
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "图层名称"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["fill", "line", "symbol", "circle", "heatmap", "fill-extrusion", "raster", "raster-particle", "hillshade", "model", "background", "sky", "slot", "clip"],
+            "description": "图层的类型"
+          },
+          "source": {
+            "type": "string",
+            "description": "图层的数据源名称"
+          }
+        },
+        "required": ["id", "type", "source"]
+      }
+    }
+  },
+  "required": ["version", "sources", "layers"]
+}

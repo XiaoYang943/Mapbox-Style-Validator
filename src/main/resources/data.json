@@ -1,0 +1,63 @@
+{
+  "version": 8,
+  "name": "广东-修改-未生成简化面 Style",
+  "metadata": {
+    "maputnik:renderer": "mlgljs"
+  },
+  "sources": {
+    "yawsplw": {
+      "type": "vector",
+      "scheme": "xyz",
+      "tiles": [
+        "http://localhost:9548/LineSpaceServer/martin/MVT/linespace_1824698820578910210/{z}/{x}/{y}"
+      ]
+    },
+    "nn19vds": {
+      "type": "vector",
+      "url": "http://localhost:9545/linespace_1824698820578910210"
+    }
+  },
+  "sprite": "http://localhost:9549/resource/styles/osm-bright-gl-style/sprite",
+  "glyphs": "http://localhost:9549/resource/font/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "linespace_layer",
+      "type": "fill",
+      "source": "yawsplw",
+      "source-layer": "linespace_layer",
+      "paint": {
+        "fill-color": "rgba(255,255,255, 1)"
+      }
+    },
+    {
+      "id": "square",
+      "type": "fill",
+      "source": "yawsplw",
+      "source-layer": "linespace_layer",
+      "filter": [
+        "all",
+        [
+          "==",
+          "smallFeatureStrategy",
+          "square"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(0,0,0, 1)"
+      }
+    },
+    {
+      "id": "line",
+      "type": "line",
+      "source": "nn19vds",
+      "source-layer": "linespace_layer",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(0, 0, 255, 1)"
+      }
+    }
+  ],
+  "id": "yawsplw"
+}
